@@ -4,9 +4,9 @@
   "version": "1.0",
   "description": "Adds team members to a JIRA based on a comma-delineated list of emails in Options",
   "icons": {
-      "16": "images/icon16.png",
-      "32": "images/icon32.png",
-      "128": "images/icon128.png"
+    "16": "images/icon16.png",
+    "32": "images/icon32.png",
+    "128": "images/icon128.png"
   },
   "action": {
     "default_icon": {
@@ -19,5 +19,11 @@
   "permissions": ["scripting", "activeTab", "storage"],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["css/*.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
