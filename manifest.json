@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Add Team",
+  "version": "1.0",
+  "description": "Adds team members to a JIRA based on a comma-delineated list of emails in Options",
+  "icons": {
+      "16": "images/icon16.png",
+      "32": "images/icon32.png",
+      "128": "images/icon128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "images/icon16.png",
+      "32": "images/icon32.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "options_page": "options.html",
+  "permissions": ["scripting", "activeTab", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
