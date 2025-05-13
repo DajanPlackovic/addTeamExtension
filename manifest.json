@@ -20,9 +20,16 @@
   "background": {
     "service_worker": "background.js"
   },
+  "content_scripts": [
+    {
+      "js": ["script.js"],
+      "matches": ["<all_urls>"],
+      "type": "module"
+    }
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["css/*.css"],
+      "resources": ["css/*.css", "images/*.png", "utils/*.js"],
       "matches": ["<all_urls>"]
     }
   ]
