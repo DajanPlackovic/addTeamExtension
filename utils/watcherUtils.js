@@ -34,13 +34,10 @@ export async function addJira(contacts) {
     select2Input.value = email;
     select2Input.dispatchEvent(new Event('input', { bubbles: true }));
 
-    let label;
-    let attempts = 0;
-    while (!label) {
-      await delay(1000);
-      label = document.querySelector('.select2-result-label');
-      attempts++;
-      if (attempts > 5) continue mainloop;
+    const label = await findElement('.select2-result-label');
+    if (!label) {
+      console.warn(`Select2 label not found for ${email}`);
+      continue;
     }
 
     dispatchEnterKey(select2Input);
