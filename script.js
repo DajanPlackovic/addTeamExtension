@@ -1,8 +1,10 @@
-// Import utility functions
-import { addWatchersSequentially } from './utils/watcherUtils.js';
-
 // Main script that runs when extension is triggered
-chrome.storage.sync.get('listItems', function (data) {
+chrome.storage.sync.get('listItems', async function (data) {
+  let addWatchersSequentially = await (async () =>
+    (
+      await import('./utils/watcherUtils.js')
+    ).addWatchersSequentially)();
+  console.log(addWatchersSequentially);
   function addWatchers(contacts) {
     addWatchersSequentially(contacts);
   }
