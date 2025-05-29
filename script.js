@@ -1,12 +1,14 @@
 // Main script that runs when extension is triggered
 chrome.storage.sync.get('listItems', async function (data) {
-  const emails = data.listItems.split(',').map(word => word.trim());
-  if (!emails?.length) {
+  const list = data.listItems;
+  if (!list?.length)
+  {
     alert(
       `No team members added.\nAdd a comma-delineated list of team members on the option page before proceeding.`
     );
     return;
   }
+  const emails = list.split(',').map(word => word.trim());
   const url = window.location.href;
   const code = url.match(/[A-Z0-9]+\-[0-9]+/);
   let domain = url.match(/[a-z0-9]+\.uberinternal\.com/)[0];
