@@ -29,7 +29,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["css/*.css", "images/*.png", "utils/*.js"],
+      "resources": ["css/*.css", "images/*.png", "utils/watcherUtils.js", "utils/domUtils.js"],
       "matches": ["<all_urls>"]
     }
   ]
