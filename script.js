@@ -44,7 +44,6 @@ chrome.storage.sync.get('listItems', async function (data) {
     credentials: 'include',
   });
   if (response?.ok) {
-    window.location.reload();
     return;
   }
   domain =
@@ -71,7 +70,6 @@ chrome.storage.sync.get('listItems', async function (data) {
     credentials: 'include',
   });
   if (response?.ok) {
-    window.location.reload();
     return;
   }
   alert('An error has occurred.\nCheck the console for more information.');
