@@ -1,8 +1,43 @@
 // Main script that runs when extension is triggered
 chrome.storage.sync.get('listItems', async function (data) {
+  const sendRequest = async (domainRules, emails) => {
+    let response = await fetch(domainRules['fetchUrl'], {
+      headers: {
+        'content-type': 'application/json',
+        priority: 'u=1, i',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'x-requested-with': 'XMLHttpRequest',
+      },
+      referrer: `${url}`, // Full URL
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      body: `{\"usernames\":[${emails.reduce(
+        (acc, curr, idx) => acc + `${!idx ? '' : ','}\"` + curr + '"',
+        ''
+      )}]}${domainRules['structure']}`,
+      method: `${domainRules['method']}`,
+      mode: 'cors',
+      credentials: 'include',
+    });
+    if (!response?.ok) {
+      return null;
+    }
+  }
+
+  const finish = async () => {
+    chrome.runtime.sendMessage({
+      type: "ADDING_COMPLETE",
+      data: {
+        url: window.location.href
+      }
+    })
+  }
+
+  console.log('Running script');
+
   const list = data.listItems;
-  if (!list?.length)
-  {
+  if (!list?.length) {
     alert(
       `No team members added.\nAdd a comma-delineated list of team members on the option page before proceeding.`
     );
@@ -24,55 +59,16 @@ chrome.storage.sync.get('listItems', async function (data) {
       structure: ',"organisationIds":[],"emails":[]',
     },
   };
-  console.log(domainRules);
-  console.log(domainRules[domain]);
-  let response = await fetch(domainRules[domain]['fetchUrl'], {
-    headers: {
-      'content-type': 'application/json',
-      priority: 'u=1, i',
-      'sec-fetch-dest': 'empty',
-      'sec-fetch-mode': 'cors',
-      'sec-fetch-site': 'same-origin',
-      'x-requested-with': 'XMLHttpRequest',
-    },
-    referrer: `${url}`, // Full URL
-    referrerPolicy: 'strict-origin-when-cross-origin',
-    body: `{\"usernames\":[${emails.reduce(
-      (acc, curr, idx) => acc + `${!idx ? '' : ','}\"` + curr + '"',
-      ''
-    )}]}${domainRules[domain]['structure']}`,
-    method: `${domainRules[domain]['method']}`,
-    mode: 'cors',
-    credentials: 'include',
-  });
-  if (response?.ok) {
-    return;
-  }
+
+  let response = await sendRequest(domainRules[domain], emails);
+  if (response)
+    return await finish();
   domain =
     domain === 't3.uberinternal.com'
       ? 'jira.uberinternal.com'
       : 't3.uberinternal.com';
-  response = await fetch(domainRules[domain]['fetchUrl'], {
-    headers: {
-      'content-type': 'application/json',
-      priority: 'u=1, i',
-      'sec-fetch-dest': 'empty',
-      'sec-fetch-mode': 'cors',
-      'sec-fetch-site': 'same-origin',
-      'x-requested-with': 'XMLHttpRequest',
-    },
-    referrer: `${url}`, // Full URL
-    referrerPolicy: 'strict-origin-when-cross-origin',
-    body: `{\"usernames\":[${emails.reduce(
-      (acc, curr, idx) => acc + `${!idx ? '' : ','}\"` + curr + '"',
-      ''
-    )}]}${domainRules[domain]['structure']}`,
-    method: `${domainRules[domain]['method']}`,
-    mode: 'cors',
-    credentials: 'include',
-  });
-  if (response?.ok) {
-    return;
-  }
+  response = await sendRequest(domainRules[domain], emails);
+  if (response)
+    return await finish();
   alert('An error has occurred.\nCheck the console for more information.');
 });
